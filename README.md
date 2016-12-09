@@ -12,3 +12,8 @@ https://www.vagrantup.com/
 vagrant up
 
 설정이 완료되면 (오래 걸려요) 웹브라우저를 열고 http://localhost:8083
+
+
+## 빌드된 이미지
+
+https://drive.google.com/drive/folders/0B-y5Szi9BBVFS0NHS29TQ2d1elk?usp=sharing
