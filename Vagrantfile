@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "bento/ubuntu-16.04"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network "forwarded_port", guest: 80, host: 8083
+  config.vm.network "forwarded_port", guest: 4200, host: 4203
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -48,7 +49,8 @@ Vagrant.configure("2") do |config|
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
-    vb.memory = "2048"
+    vb.cpus = "2"  
+    vb.memory = "4096"
   end
   #
   # View the documentation for the provider you are using for more
@@ -74,7 +76,7 @@ Vagrant.configure("2") do |config|
     touch /etc/apt/sources.list.d/gitlab-ce.list
     echo 'deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu xenial main' >> /etc/apt/sources.list.d/gitlab-ce.list
     apt-get update
-    apt-get install -y gitlab-ce
+    apt-get install -y gitlab-ce shellinabox ldap-utils
     gitlab-ctl reconfigure
   SHELL
 end
