@@ -13,8 +13,8 @@ vagrant up
 
 설정이 완료되면 (오래 걸려요) 웹브라우저를 열고 
  
-gitlab : http://127.0.0.1:8083  
-shellinabox : https://127.0.0.1:4203/  
+gitlab - http://127.0.0.1:8083  
+shellinabox - https://127.0.0.1:4203/  
 
 ## 빌드된 이미지
 
