@@ -19,6 +19,8 @@ Vagrant.configure("2") do |config|
   # `vagrant box outdated`. This is not recommended.
   # config.vm.box_check_update = false
 
+  # config.vm.provision "file", source: "gitlab-ce_8.13.9-ce.0_amd64.deb", destination: "/home/vagrant/gitlab-ce_8.13.9-ce.0_amd64.deb"
+
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
@@ -38,7 +40,7 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder "./data", "/vagrant_data"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -68,15 +70,13 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get install curl openssh-server ca-certificates
+    apt-get install -y curl openssh-server ca-certificates shellinabox ldap-utils
     debconf-set-selections <<< "postfix postfix/mailname string $HOSTNAME"
     debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y postfix
-    curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null
-    touch /etc/apt/sources.list.d/gitlab-ce.list
-    echo 'deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu xenial main' >> /etc/apt/sources.list.d/gitlab-ce.list
-    apt-get update
-    apt-get install -y gitlab-ce shellinabox ldap-utils
+    curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+    wget https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/xenial/gitlab-ce_8.13.9-ce.0_amd64.deb/download
+    dpkg -i download
     gitlab-ctl reconfigure
   SHELL
 end
