@@ -65,13 +65,16 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    sudo apt-get update
-    sudo apt-get install curl openssh-server ca-certificates
+    apt-get update
+    apt-get install curl openssh-server ca-certificates
     debconf-set-selections <<< "postfix postfix/mailname string $HOSTNAME"
     debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y postfix
-    curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
-    sudo apt-get install -y gitlab-ce
-    sudo gitlab-ctl reconfigure
+    curl https://packages.gitlab.com/gpg.key 2> /dev/null | sudo apt-key add - &>/dev/null
+    touch /etc/apt/sources.list.d/gitlab-ce.list
+    echo 'deb https://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/ubuntu xenial main' >> /etc/apt/sources.list.d/gitlab-ce.list
+    apt-get update
+    apt-get install -y gitlab-ce
+    gitlab-ctl reconfigure
   SHELL
 end
